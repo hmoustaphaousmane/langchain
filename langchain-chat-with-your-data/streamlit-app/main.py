@@ -1,10 +1,18 @@
 # Import required libraries
 import streamlit as st
+from openai import OpenAI
 
 # === Begin Main Content === #
 
 # Title
 st.title("Chat With Your Data")
+
+# Set OpenaAI API key from stramlit secrets
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
+# Set a default model
+if "openai_model" not in st.session_state:
+    st.session_state["openai_model"] = "gpt-3.5-turbo"
 
 # Initialize chat history (an empty list if `messages` is not in `st.session_state`)
 if "messages" not in st.session_state:
@@ -23,11 +31,18 @@ if prompt := st.chat_input("Ask a question"):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    # Chatbot's response
-    response = f"Echo: {prompt}"
     # Display assistant's response in chat message container
     with st.chat_message("assistant"):
-        st.markdown(response)
+        stream = client.chat.completions.create(
+            model=st.session_state["openai_model"],
+            messages=[
+                {"role": m["role"], "content": m["content"]}
+                for m in st.session_state.messages
+            ],
+            stream=True,
+        )
+        # Chatbot's response
+        response = st.write_stream(stream)
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": response})
 
