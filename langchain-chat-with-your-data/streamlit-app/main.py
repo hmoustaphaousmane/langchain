@@ -9,6 +9,10 @@ with st.sidebar:
     # Get user's OpenAI API key
     openai_api_key = st.text_input('OpenAI API Key', type='password')
 
+    # Store the API Key in a file (to avoid circular imports)
+    with open('openai_api_key.txt', 'w') as f:
+        f.write(openai_api_key)
+
 # === End Sidebar === #
 
 
@@ -49,7 +53,7 @@ else:
         # Display assistant response in chat message container
         with st.chat_message("assistant"):
             # Get response from langchain
-            response = generate_response(prompt, openai_api_key)
+            response = generate_response(prompt)
             # Chatbot's response
             if response is not None:
                 st.write(response)
