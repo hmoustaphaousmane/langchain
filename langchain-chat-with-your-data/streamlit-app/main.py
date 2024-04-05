@@ -1,17 +1,12 @@
 # Import required libraries
 import streamlit as st
 
-from utils import generate_response
+from sidebar import Sidebar
 
 # === Begin Sidebar === #
 
-with st.sidebar:
-    # Get user's OpenAI API key
-    openai_api_key = st.text_input('OpenAI API Key', type='password')
-
-    # Store the API Key in a file (to avoid circular imports)
-    with open('openai_api_key.txt', 'w') as f:
-        f.write(openai_api_key)
+sidebar = Sidebar()
+sidebar.chat_parameters()
 
 # === End Sidebar === #
 
@@ -26,9 +21,14 @@ st.title("Chat App Powered by LangChain 🦜🔗")
 
 # Set a default model
 if "openai_model" not in st.session_state:
-    st.session_state["openai_model"] = "gpt-3.5-turbo"
+    st.session_state["openai_model"] = 'gpt-3.5-turbo'
+if "opena_temperature" not in st.session_state:
+    openai_temperature = 0
+    st.session_state["openai_temperature"] = openai_temperature
+from utils import generate_response
 
-# Initialize chat history (an empty list if `messages` is not in `st.session_state`)
+# Initialize chat history (an empty list if `messages` is not in
+# `st.session_state`)
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -37,6 +37,7 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):  # `role` is the message's author
         st.markdown(message["content"])  # `content` is the message content
 
+openai_api_key = sidebar.openai_api_key
 if not openai_api_key.startswith('sk-'):
     st.warning('Please enter your OpenAI API Key!', icon="⚠️")
 else:
@@ -46,7 +47,7 @@ else:
         with st.chat_message("user"):
             st.markdown(prompt)
             print(f"\n\nUser 🙂: {prompt}\n")
-        
+
         # Add user message to chat history
         st.session_state.messages.append({"role": "user", "content": prompt})
 
@@ -60,8 +61,8 @@ else:
             else:
                 response = "No response available at this time."
                 st.write(response)
-            print(f"Assistant 🤖: {response}\n")
-            
+            print(f"Assistant 🤖: {response}")
+            print(openai_temperature)
 
             # Add assistant response to chat history
             st.session_state.messages.append(
