@@ -10,6 +10,7 @@ class Sidebar:
                 'OpenAI API Key',
                 type='password'
             )
+            st.session_state["openai_api_key"] = self.openai_api_key
 
             # Store the API Key in a file (to avoid circular imports)
             with open('openai_api_key.txt', 'w') as f:
@@ -20,7 +21,8 @@ class Sidebar:
                 label="Models",
                 options=["gpt-3.5-turbo", "gpt-4"]
             )
-            st.session_state["openai_model"] = self.openai_model
+            if "openai_model" not in st.session_state:
+                st.session_state["openai_model"] = self.openai_model
 
             # Temperature (controls the randomness of the output)
             self.temperature = st.slider(
@@ -31,3 +33,4 @@ class Sidebar:
                 step=0.1
             )
             st.session_state["openai_temperature"] = self.temperature
+
