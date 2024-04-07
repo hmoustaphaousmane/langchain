@@ -5,9 +5,21 @@ import streamlit as st
 
 
 # Retrieve the OpenAI API Key, model and temperature
-model = st.session_state["openai_model"]
-openai_api_key = st.session_state.openai_api_key
-temperature = st.session_state.openai_temperature,
+# Model
+if "openai_model" in st.session_state:
+    model = st.session_state["openai_model"]
+else:
+    model = "gpt-3.5-turbo"  # Default model: gpt-3.5-turbo
+
+# API key
+if "openai_api_key" in st.session_state:
+    openai_api_key = st.session_state.openai_api_key
+
+# Temperature
+if "openai_temperature" in st.session_state:
+    temperature = float(st.session_state.get("openai_temperature"))
+else:
+    temperature = 0.0
 
 # Chat model
 llm = ChatOpenAI(
