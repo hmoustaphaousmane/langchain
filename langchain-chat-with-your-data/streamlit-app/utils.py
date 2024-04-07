@@ -3,27 +3,18 @@ from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 import streamlit as st
 
-from sidebar import Sidebar
 
-# === Begin Sidebar === #
-
-# Initialize sidebar
-sidebar = Sidebar()
-sidebar.chat_parameters()
-
-# === End Sidebar === #
-
-# Retrieve the OpenAI API Key
-# with open('openai_api_key.txt', 'r') as f:
-#     openai_api_key = f.read()
+# Retrieve the OpenAI API Key, model and temperature
+model = st.session_state["openai_model"]
+openai_api_key = st.session_state.openai_api_key
+temperature = st.session_state.openai_temperature,
 
 # Chat model
 llm = ChatOpenAI(
-    model=st.session_state["openai_model"],
-    temperature=st.session_state.openai_temperature,
-    openai_api_key=st.session_state.openai_api_key,
+    model=model,
+    temperature=temperature,
+    openai_api_key=openai_api_key,
 )
-# st.info(llm.invoke(user_input).content)
 
 # Memory
 memory = ConversationBufferMemory()
@@ -53,5 +44,5 @@ def diplay_messages():
         st.session_state.messages = []
 
     for message in st.session_state.messages:
-        with st.chat_message(message["role"]):  # `role` is the message's author
+        with st.chat_message(message["role"]):  # `role` is the message author
             st.markdown(message["content"])  # `content` is the message content
