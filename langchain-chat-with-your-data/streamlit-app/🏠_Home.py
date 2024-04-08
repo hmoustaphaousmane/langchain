@@ -15,7 +15,7 @@ st.title("Chat App Powered by LangChain 🦜🔗")
 
 st.page_link("🏠_Home.py", label="Home", icon="🏠")
 st.page_link("pages/1🤖_Chat.py", label="General Knowledge Chat", icon="🤖")
-# st.page_link("pages/page_2.py", label="Page 2", icon="2️⃣", disabled=True)
+st.page_link("pages/2📖_Chat_With_Your_PDF.py", label="PDF Chat", icon="📖")
 st.page_link("http://chat.openai.com", label="ChatGPT", icon="🌎")
 
 st.markdown("To interact with the chatbot, an OpenAI API key is required.\
