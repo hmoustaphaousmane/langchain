@@ -1,9 +1,10 @@
 import streamlit as st
 
-from sidebar import chat_parameters
+from sidebar import chat_parameters, clear_history
 
 # Load chat parameters
 chat_parameters()
+clear_history()
 
 if all(key in st.session_state for key in [
     "openai_api_key", "openai_model", "openai_temperature"
