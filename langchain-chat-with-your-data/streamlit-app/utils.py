@@ -70,8 +70,9 @@ def save_pdf(uploaded_file, upload_dir="uploads"):
     Saves a PDF file to the specified directory.
 
     Args:
-        uploaded_file (streamlit.UploadedFile): The uploaded PDF file from Streamlit.
-        upload_dir (str, optional): Directory to save the uploaded file. Defaults to "uploads".
+        uploaded_file (streamlit.UploadedFile): The uploaded PDF file from st.
+        upload_dir (str, optional): Directory to save the uploaded file.
+        Defaults to "uploads".
     """
     # Check if 'uploads' directory exists, create it if not
     if not os.path.exists(upload_dir):
@@ -90,7 +91,9 @@ def save_pdf(uploaded_file, upload_dir="uploads"):
     with open(file_path, "wb") as f:
         f.write(uploaded_file.read())
 
-    st.success(f"PDF uploaded successfully to: {os.path.join(upload_dir, filename)}")
+    st.success(f"""PDF uploaded successfully to: {
+        os.path.join(upload_dir, filename)
+    }""")
 
     return file_path
 
@@ -101,11 +104,12 @@ def load_db(file, chain_type, k=3):
 
     Args:
         file (file): The PDF document to be loaded.
-        chain_type (str): The chain type to use to create the 'combine_docs_chain' in the CRC.
+        chain_type (str): The chain type to use to create the
+        'combine_docs_chain' in the CRC.
         k (int): Additional parameter to be passed to the retriever.
-        
+
     Returns:
-        ConversationalRetrievalChain: Initialized conversational retrieval chain.
+        ConversationalRetrievalChain: Initialized CRC.
     """
     # Load the documents
     loader = PyPDFLoader(file)  # Load the PDF file
@@ -130,22 +134,25 @@ def load_db(file, chain_type, k=3):
         search_kwargs={"k": k}
     )
 
-    # Create a conversational retrieval chain - Chatbot chain (memory is managed externally)
+    # Create a conversational retrieval chain - Chatbot chain
+    # (memory is managed externally)
     qa = ConversationalRetrievalChain.from_llm(
-        llm=ChatOpenAI(temperature=0), 
-        chain_type=chain_type, 
-        retriever=retriever, 
+        llm=ChatOpenAI(temperature=0),
+        chain_type=chain_type,
+        retriever=retriever,
         return_source_documents=True,
         return_generated_question=True,
-    )  # Memory will be managed externally for the convenience of the GUI below i.e. chat history will be managed outside the chain
+    )  # Memory will be managed externally for the convenience of the GUI
+    # i.e. chat history will be managed outside the chain
 
     return qa
+
 
 def chatbot_interaction(qa, question, chat_history):
     """Interacts with the chatbot and displays responses."""
     response = qa({"question": question, "chat_history": chat_history})
     return response['answer']
     # if response.get('source_documents'):
-        # st.text("Relevant Documents:")
-        # for doc in response['source_documents']:
-            # st.write(doc)
+    #     st.text("Relevant Documents:")
+    #     for doc in response['source_documents']:
+    #         st.write(doc)
