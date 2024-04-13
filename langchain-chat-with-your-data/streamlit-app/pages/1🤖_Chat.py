@@ -1,16 +1,15 @@
 import streamlit as st
 
-from sidebar import chat_parameters, clear_history
+from sidebar import chat_parameters
 
 # Load chat parameters
 chat_parameters()
-clear_history()
 
 if all(key in st.session_state for key in [
     "openai_api_key", "openai_model", "openai_temperature"
     ]
 ):
-    from utils import generate_response, diplay_messages
+    from utils import generate_response, diplay_messages, clear_openai_history
 
     # Display history messages
     diplay_messages()
@@ -47,3 +46,13 @@ if all(key in st.session_state for key in [
             st.session_state.messages.append(
                 {"role": "assistant", "content": response}
             )
+
+if st.sidebar.button("🛑 Clear History"):
+    print(f"""🛑 Chat history length befor reset: {
+        len(st.session_state.messages)
+    }\n""")
+    st.session_state["messages"] = []
+    print(f"""🛑 Chat history length after reset: {
+        len(st.session_state.messages)
+    }""")
+    clear_openai_history()

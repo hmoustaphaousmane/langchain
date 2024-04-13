@@ -156,3 +156,8 @@ def chatbot_interaction(qa, question, chat_history):
     #     st.text("Relevant Documents:")
     #     for doc in response['source_documents']:
     #         st.write(doc)
+
+
+def clear_openai_history():
+    # Empty the memory
+    memory.clear()

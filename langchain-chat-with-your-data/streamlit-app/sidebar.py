@@ -28,19 +28,3 @@ def chat_parameters():
             step=0.1
         )
         st.session_state["openai_temperature"] = temperature
-
-        # if st.button("🛑 Reset Parameters", type="primary"):
-        #     st.session_state["openai_api_key"] = ""
-        #     st.session_state["openai_api_key"] = ""
-        #     st.session_state["openai_api_key"] = 0.0
-
-
-def clear_history():
-    if st.sidebar.button("🛑 Clear History"):
-        print(f"""🛑 Chat history length befor reset: {
-            len(st.session_state.messages)
-        }\n""")
-        st.session_state["messages"] = []
-        print(f"""🛑 Chat history length after reset: {
-            len(st.session_state.messages)
-        }""")
